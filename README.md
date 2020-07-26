@@ -33,3 +33,22 @@
 
 **Possible Queries:**
 - Check: Registration.API\GraphQL\Queries\RegistrationQuery.cs
+    - Examples:
+        > query($studentNumber: String, $name: String, $surname: String, $courseId: Int){
+            > allStudents{
+                > studentNumber
+                > name
+                > surname
+            > },
+            > studentByStudentNumber(studentNumber: $studentNumber){
+                > name
+            > },
+            > studentByFullName(name: $name, surname: $surname){
+                > name
+                > surname
+            > },
+            > studentByCourse(courseId: $courseId){
+                > name
+                > surname
+            > }
+            > }
