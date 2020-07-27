@@ -22,12 +22,22 @@ namespace Registration.API.GraphQL.Types
             FieldAsync<AddressType>
                 (
                     "Address",
-                    resolve: async ctx => await addressService.GetById(ctx.Source.AddressId)
+                    resolve: async ctx =>
+                    {
+                        var addressId = ctx.Source.AddressId;
+
+                        return await addressService.GetById(addressId);
+                    }
                 );
             FieldAsync<ListGraphType<SubjectType>>
                 (
                     "Subjects",
-                    resolve: async ctx => await subjectService.GetByCourse(ctx.Source.CourseId)
+                    resolve: async ctx =>
+                    {
+                        var courseId = ctx.Source.CourseId;
+
+                        return await subjectService.GetByCourse(courseId);
+                    }
                 );
         }
     }

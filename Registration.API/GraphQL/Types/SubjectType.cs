@@ -15,12 +15,22 @@ namespace Registration.API.GraphQL.Types
             FieldAsync<CourseType>
                 (
                     "Course",
-                    resolve: async ctx => await courseService.GetById(ctx.Source.CourseId)
+                    resolve: async ctx =>
+                    {
+                        var courseId = ctx.Source.CourseId;
+
+                        return await courseService.GetById(courseId);
+                    }
                 );
             FieldAsync<SemesterType>
                 (
                     "Semester",
-                    resolve: async ctx => await semesterService.GetById(ctx.Source.SemesterId)
+                    resolve: async ctx =>
+                    {
+                        var semesterId = ctx.Source.SemesterId;
+
+                        return await semesterService.GetById(semesterId);
+                    }
                 );
         }
     }

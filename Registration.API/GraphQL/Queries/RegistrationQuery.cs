@@ -21,7 +21,12 @@ namespace Registration.API.GraphQL_Queries
                         (
                             new QueryArgument<StringGraphType> { Name = "studentNumber" }
                         ),
-                    resolve: async ctx => await studentService.GetByStudentNumber(ctx.GetArgument<string>("studentNumber"))
+                    resolve: async ctx => 
+                    {
+                        var studentNumber = ctx.GetArgument<string>("studentNumber");
+
+                        return await studentService.GetByStudentNumber(studentNumber);
+                    }
                 );
 
             FieldAsync<StudentType>
@@ -32,8 +37,13 @@ namespace Registration.API.GraphQL_Queries
                             new QueryArgument<StringGraphType> { Name = "name" },
                             new QueryArgument<StringGraphType> { Name = "surname" }
                         ),
-                    resolve: async ctx => await studentService
-                                                    .GetByFullName(ctx.GetArgument<string>("name"), ctx.GetArgument<string>("surname"))
+                    resolve: async ctx =>
+                    {
+                        var name = ctx.GetArgument<string>("name");
+                        var surname = ctx.GetArgument<string>("surname");
+
+                        return await studentService.GetByFullName(name, surname);
+                    }
                 );
 
             FieldAsync<ListGraphType<StudentType>>
@@ -43,7 +53,12 @@ namespace Registration.API.GraphQL_Queries
                         (
                             new QueryArgument<IntGraphType> { Name = "courseId" }
                         ),
-                    resolve: async ctx => await studentService.GetByCourse(ctx.GetArgument<int>("courseId"))
+                    resolve: async ctx =>
+                    {
+                        var courseId = ctx.GetArgument<int>("courseId");
+
+                        return await studentService.GetByCourse(courseId);
+                    }
                 );
         }
     }
