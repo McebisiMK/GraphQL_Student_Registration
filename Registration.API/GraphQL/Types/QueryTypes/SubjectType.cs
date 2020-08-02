@@ -2,7 +2,7 @@
 using Registration.Entities.Models;
 using Registration.Service.Contracts;
 
-namespace Registration.API.GraphQL.Types
+namespace Registration.API.GraphQL_Types.QueryTypes
 {
     public class SubjectType : ObjectGraphType<Subject>
     {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Registration.API.GraphQL.Types
+namespace Registration.API.GraphQL_Types.QueryTypes
 {
     public class StudentType : ObjectGraphType<Student>
     {

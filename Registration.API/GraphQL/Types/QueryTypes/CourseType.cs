@@ -1,7 +1,7 @@
 ﻿using GraphQL.Types;
 using Registration.Entities.Models;
 
-namespace Registration.API.GraphQL.Types
+namespace Registration.API.GraphQL_Types.QueryTypes
 {
     public class CourseType : ObjectGraphType<Course>
     {
