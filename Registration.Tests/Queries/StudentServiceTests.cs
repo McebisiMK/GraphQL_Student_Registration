@@ -35,16 +35,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange----------------------------------
             var studentNumber = "2020070001";
-            var student = new Student
-            {
-                StudentNumber = "2020070001",
-                Name = "Name",
-                Surname = "Surname",
-                AddressId = 1,
-                Cellphone = "0000000000",
-                IdNumber = "0000000000000",
-                CourseId = 1
-            };
+            var student = GetStudent();
             var studentRepository = Substitute.For<IStudentRepository>();
             var studentService = CreateStudentService(studentRepository);
 
@@ -80,16 +71,7 @@ namespace Registration.Tests.Queries
             //-----------------------Arrange----------------------------------
             var name = "FirstName";
             var surname = "LastName";
-            var student = new Student
-            {
-                StudentNumber = "2020070001",
-                Name = "FirstName",
-                Surname = "LastName",
-                AddressId = 1,
-                Cellphone = "0000000000",
-                IdNumber = "0000000000000",
-                CourseId = 1
-            };
+            var student = GetStudent();
             var studentRepository = Substitute.For<IStudentRepository>();
             var studentService = CreateStudentService(studentRepository);
 
@@ -124,19 +106,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange----------------------------------
             var courseId = 1;
-            var students = new List<Student>
-            {
-                new Student
-                {
-                StudentNumber = "2020070001",
-                Name = "FirstName",
-                Surname = "LastName",
-                AddressId = 1,
-                Cellphone = "0000000000",
-                IdNumber = "0000000000000",
-                CourseId = 1
-                }
-            };
+            var students = GetStudents();
             var studentRepository = Substitute.For<IStudentRepository>();
             var studentService = CreateStudentService(studentRepository);
 
@@ -153,29 +123,7 @@ namespace Registration.Tests.Queries
         public async Task GetAll_Given_Student_Table_Contains_Data_Should_Returns_List_Of_Student_Details()
         {
             //-----------------------Arrange----------------------------------
-            var students = new List<Student>
-            {
-                new Student
-                {
-                StudentNumber = "2020070001",
-                Name = "FirstName",
-                Surname = "LastName",
-                AddressId = 1,
-                Cellphone = "0000000000",
-                IdNumber = "0000000000000",
-                CourseId = 1
-                },
-                new Student
-                {
-                StudentNumber = "2020070002",
-                Name = "FirstName1",
-                Surname = "LastName1",
-                AddressId = 1,
-                Cellphone = "0000000001",
-                IdNumber = "0000000000001",
-                CourseId = 1
-                }
-            };
+            var students = GetStudents();
             var studentRepository = Substitute.For<IStudentRepository>();
             var studentService = CreateStudentService(studentRepository);
 
@@ -186,6 +134,49 @@ namespace Registration.Tests.Queries
             //-----------------------Assert-----------------------------------
             actual.Should().BeEquivalentTo(students);
             await studentRepository.Received(1).GetAll();
+        }
+
+        private Student GetStudent()
+        {
+            return new Student
+                    {
+                        StudentNumber = "2020070001",
+                        Name = "FirstName",
+                        Surname = "LastName",
+                        AddressId = 1,
+                        Cellphone = "0000000000",
+                        IdNumber = "0000000000000",
+                        CourseId = 1
+                    };
+        }
+
+        private List<Student> GetStudents()
+        {
+            var students = new List<Student>
+                            {
+                                new Student
+                                {
+                                StudentNumber = "2020070001",
+                                Name = "FirstName",
+                                Surname = "LastName",
+                                AddressId = 1,
+                                Cellphone = "0000000000",
+                                IdNumber = "0000000000000",
+                                CourseId = 1
+                                },
+                                new Student
+                                {
+                                StudentNumber = "2020070002",
+                                Name = "FirstName1",
+                                Surname = "LastName1",
+                                AddressId = 1,
+                                Cellphone = "0000000001",
+                                IdNumber = "0000000000001",
+                                CourseId = 1
+                                }
+                            };
+
+            return students;
         }
 
         private static StudentService CreateStudentService(IStudentRepository studentRepository)

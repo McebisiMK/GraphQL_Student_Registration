@@ -35,13 +35,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange-----------------------------------
             var subjectId = 1;
-            var subject = new Subject
-            {
-                Id = 1,
-                Name = "Subject Name 3",
-                CourseId = 1,
-                SemesterId = 1
-            };
+            var subject = GetSubject();
             var subjectRepository = Substitute.For<ISubjectRepository>();
             var subjectService = CreateSubjectService(subjectRepository);
 
@@ -76,30 +70,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange-----------------------------------
             var subjectId = 1;
-            var subjectList = new List<Subject>
-            {
-                new Subject
-                {
-                    Id = 1,
-                    Name = "Subject Name",
-                    CourseId = 1,
-                    SemesterId = 1
-                },
-                new Subject
-                {
-                    Id = 2,
-                    Name = "Subject Name 2",
-                    CourseId = 1,
-                    SemesterId = 1
-                },
-                new Subject
-                {
-                    Id = 3,
-                    Name = "Subject Name 3",
-                    CourseId = 1,
-                    SemesterId = 1
-                }
-            };
+            var subjectList = GetSubjects();
             var subjectRepository = Substitute.For<ISubjectRepository>();
             var subjectService = CreateSubjectService(subjectRepository);
 
@@ -116,30 +87,7 @@ namespace Registration.Tests.Queries
         public async Task GetAll_Given_Subject_Table_Contains_Data_Should_Return_List_Of_Subject_Details()
         {
             //-----------------------Arrange----------------------------------
-            var subjectList = new List<Subject>
-            {
-                new Subject
-                {
-                    Id = 1,
-                    Name = "Subject Name",
-                    CourseId = 1,
-                    SemesterId = 1
-                },
-                new Subject
-                {
-                    Id = 2,
-                    Name = "Subject Name 2",
-                    CourseId = 1,
-                    SemesterId = 1
-                },
-                new Subject
-                {
-                    Id = 3,
-                    Name = "Subject Name 3",
-                    CourseId = 1,
-                    SemesterId = 1
-                }
-            };
+            var subjectList = GetSubjects();
             var subjectRepository = Substitute.For<ISubjectRepository>();
             var subjectService = CreateSubjectService(subjectRepository);
 
@@ -150,6 +98,47 @@ namespace Registration.Tests.Queries
             //-----------------------Assert-----------------------------------
             actual.Should().BeEquivalentTo(subjectList);
             await subjectRepository.Received(1).GetAll();
+        }
+
+        private Subject GetSubject()
+        {
+            return new Subject
+                    {
+                        Id = 1,
+                        Name = "Subject Name",
+                        CourseId = 1,
+                        SemesterId = 1
+                    };
+        }
+
+        private List<Subject> GetSubjects()
+        {
+            var subjects = new List<Subject>
+                            {
+                                new Subject
+                                {
+                                    Id = 1,
+                                    Name = "Subject Name",
+                                    CourseId = 1,
+                                    SemesterId = 1
+                                },
+                                new Subject
+                                {
+                                    Id = 2,
+                                    Name = "Subject Name 2",
+                                    CourseId = 1,
+                                    SemesterId = 1
+                                },
+                                new Subject
+                                {
+                                    Id = 3,
+                                    Name = "Subject Name 3",
+                                    CourseId = 1,
+                                    SemesterId = 1
+                                }
+                            };
+
+            return subjects;
         }
 
         private SubjectService CreateSubjectService(ISubjectRepository subjectRepository)

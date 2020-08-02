@@ -35,11 +35,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange-----------------------------------
             var semesterId = 1;
-            var semester = new Semester
-            {
-                Id = 1,
-                Description = "Semester Name"
-            };
+            var semester = GetSemester();
             var semesterRepository = Substitute.For<ISemesterRepository>();
             var semesterService = CreateSemesterService(semesterRepository);
 
@@ -56,19 +52,7 @@ namespace Registration.Tests.Queries
         public async Task GetAll_Given_Semester_Table_Contains_Data_Should_Return_List_Of_Semester_Details()
         {
             //-----------------------Arrange----------------------------------
-            var semesterList = new List<Semester>
-            {
-                new Semester
-                {
-                    Id = 1,
-                    Description = "Semester Name"
-                },
-                new Semester
-                {
-                    Id = 2,
-                    Description = "Semester Name 2"
-                }
-            };
+            var semesterList = GetSemesters();
             var semesterRepository = Substitute.For<ISemesterRepository>();
             var semesterService = CreateSemesterService(semesterRepository);
 
@@ -79,6 +63,34 @@ namespace Registration.Tests.Queries
             //-----------------------Assert-----------------------------------
             actual.Should().BeEquivalentTo(semesterList);
             await semesterRepository.Received(1).GetAll();
+        }
+
+        private Semester GetSemester()
+        {
+            return new Semester
+                    {
+                        Id = 1,
+                        Description = "Semester Name"
+                    };
+        }
+
+        private List<Semester> GetSemesters()
+        {
+            var semesters = new List<Semester>
+                            {
+                                new Semester
+                                {
+                                    Id = 1,
+                                    Description = "Semester Name"
+                                },
+                                new Semester
+                                {
+                                    Id = 2,
+                                    Description = "Semester Name 2"
+                                }
+                            };
+
+            return semesters;
         }
 
         private SemesterService CreateSemesterService(ISemesterRepository semesterRepository)

@@ -35,23 +35,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange----------------------------------
             var streetName = "Street";
-            var addressList = new List<Address>
-            {
-                new Address
-                {
-                    Unit = "Unit 1",
-                    Street = "Street",
-                    Town = "Town",
-                    Province = "Province"
-                },
-                new Address
-                {
-                    Unit = "Unit 2",
-                    Street = "Street",
-                    Town = "Town",
-                    Province = "Province"
-                }
-            };
+            var addressList = GetAddresses();
             var addressRepository = Substitute.For<IAddressRepository>();
             var addressService = CreateAddressService(addressRepository);
 
@@ -86,14 +70,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange-----------------------------------
             var addressId = 1;
-            var address = new Address
-                        {
-                            Id = 1,
-                            Unit = "Unit 1",
-                            Street = "Street",
-                            Town = "Town",
-                            Province = "Province"
-                        };
+            var address = GetAddress();
             var addressRepository = Substitute.For<IAddressRepository>();
             var addressService = CreateAddressService(addressRepository);
 
@@ -110,25 +87,7 @@ namespace Registration.Tests.Queries
         public async Task GetAll_Given_Address_Table_Contains_Data_Should_Return_List_Of_Address_Details()
         {
             //-----------------------Arrange----------------------------------
-            var addressList = new List<Address>
-            {
-                new Address
-                {
-                    Id = 1,
-                    Unit = "Unit 1",
-                    Street = "Street",
-                    Town = "Town",
-                    Province = "Province"
-                },
-                new Address
-                {
-                    Id = 2,
-                    Unit = "Unit 2",
-                    Street = "Street",
-                    Town = "Town",
-                    Province = "Province"
-                }
-            };
+            var addressList = GetAddresses();
             var addressRepository = Substitute.For<IAddressRepository>();
             var addressService = CreateAddressService(addressRepository);
 
@@ -139,6 +98,43 @@ namespace Registration.Tests.Queries
             //-----------------------Assert-----------------------------------
             actual.Should().BeEquivalentTo(addressList);
             await addressRepository.Received(1).GetAll();
+        }
+
+        private Address GetAddress()
+        {
+            return new Address
+                    {
+                        Id = 1,
+                        Unit = "Unit 1",
+                        Street = "Street",
+                        Town = "Town",
+                        Province = "Province"
+                    };
+        }
+
+        private List<Address> GetAddresses()
+        {
+            var addresses = new List<Address>
+                            {
+                                new Address
+                                {
+                                    Id = 1,
+                                    Unit = "Unit 1",
+                                    Street = "Street",
+                                    Town = "Town",
+                                    Province = "Province"
+                                },
+                                new Address
+                                {
+                                    Id = 2,
+                                    Unit = "Unit 2",
+                                    Street = "Street",
+                                    Town = "Town",
+                                    Province = "Province"
+                                }
+                            };
+
+            return addresses;
         }
 
         private static AddressService CreateAddressService(IAddressRepository addressRepository)

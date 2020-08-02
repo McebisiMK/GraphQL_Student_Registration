@@ -5,6 +5,7 @@ using Registration.Entities.Models;
 using Registration.Repository.Contracts;
 using Registration.Service.Services;
 using Registration.Utilities.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,11 +36,7 @@ namespace Registration.Tests.Queries
         {
             //-----------------------Arrange-----------------------------------
             var courseId = 1;
-            var course = new Course
-            {
-                Id = 1,
-                Name = "Course Name"
-            };
+            var course = GetCourse();
             var courseRepository = Substitute.For<ICourseRepository>();
             var courseService = CreateCourseService(courseRepository);
 
@@ -57,19 +54,7 @@ namespace Registration.Tests.Queries
         public async Task GetAll_Given_Course_Table_Contains_Data_Should_Return_List_Of_Course_Details()
         {
             //-----------------------Arrange----------------------------------
-            var courseList = new List<Course>
-            {
-                new Course
-                {
-                    Id = 1,
-                    Name = "Course Name"
-                },
-                new Course
-                {
-                    Id = 2,
-                    Name = "Course Name 2"
-                }
-            };
+            var courseList = GetCourses();
             var courseRepository = Substitute.For<ICourseRepository>();
             var courseService = CreateCourseService(courseRepository);
 
@@ -80,6 +65,34 @@ namespace Registration.Tests.Queries
             //-----------------------Assert-----------------------------------
             actual.Should().BeEquivalentTo(courseList);
             await courseRepository.Received(1).GetAll();
+        }
+
+        private Course GetCourse()
+        {
+            return new Course
+                    {
+                        Id = 1,
+                        Name = "Course Name"
+                    };
+        }
+
+        private List<Course> GetCourses()
+        {
+            var courses = new List<Course>
+                            {
+                                new Course
+                                {
+                                    Id = 1,
+                                    Name = "Course Name"
+                                },
+                                new Course
+                                {
+                                    Id = 2,
+                                    Name = "Course Name 2"
+                                }
+                            };
+
+            return courses;
         }
 
         private CourseService CreateCourseService(ICourseRepository courseRepository)
