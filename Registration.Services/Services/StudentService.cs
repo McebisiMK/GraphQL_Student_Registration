@@ -2,7 +2,9 @@
 using Registration.Repository.Contracts;
 using Registration.Service.Contracts;
 using Registration.Utilities.Exceptions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Registration.Service.Services
@@ -14,6 +16,26 @@ namespace Registration.Service.Services
         public StudentService(IStudentRepository studentRepository)
         {
             _studentRepository = studentRepository;
+        }
+
+        public async Task<Student> Add(Student student)
+        {
+            if (!Valid(student))
+                throw new InvalidUserObject("Student");
+
+            if (!ContainsFeignKeys(student))
+                throw new InvalidForeignKeyException("Student");
+
+            var studentNumber = await CreateNewStudentNumber();
+            student.StudentNumber = studentNumber;
+            await _studentRepository.Add(student);
+            var students = await _studentRepository.GetAll();
+            var lastInsertedStudentNumber = students
+                                            .OrderByDescending(recods => recods.StudentNumber)
+                                            .FirstOrDefault()
+                                            .StudentNumber;
+
+            return await _studentRepository.GetByStudentNumber(lastInsertedStudentNumber);
         }
 
         public async Task<IEnumerable<Student>> GetAll()
@@ -43,6 +65,54 @@ namespace Registration.Service.Services
                 throw new InvalidUserInputException(courseId.ToString());
 
             return await _studentRepository.GetByCourse(courseId);
+        }
+
+        private async Task<string> CreateNewStudentNumber()
+        {
+            var date = DateTime.Now;
+            var yearMonth = $"{ date.Year }{ date.Month.ToString("00")}";
+            var students = await _studentRepository.GetAll();
+            var LastInsertedStudentNumber = students
+                                            .OrderByDescending(student => student.StudentNumber)
+                                            .FirstOrDefault()
+                                            .StudentNumber;
+
+            var studentNumber = string.IsNullOrWhiteSpace(LastInsertedStudentNumber) ?
+                                    $"{yearMonth}0001" :
+                                    $"{yearMonth}{(int.Parse(LastInsertedStudentNumber.Substring(6, 4)) + 1).ToString("0000")}";
+
+            return studentNumber;
+        }
+
+        private bool ContainsFeignKeys(Student student)
+        {
+            var hasCourse = _studentRepository.Exists(stud => stud.CourseId.Equals(student.CourseId));
+            var hasAddress = _studentRepository.Exists(addr => addr.AddressId.Equals(student.AddressId));
+
+            return (hasCourse && hasAddress);
+        }
+
+        private bool Valid(Student student)
+        {
+            return
+                (
+                    IsValid(student.Name) &&
+                    IsValid(student.Surname) &&
+                    IsNumeric(student.CourseId) &&
+                    IsValid(student.Cellphone) &&
+                    IsValid(student.IdNumber) &&
+                    IsNumeric(student.AddressId)
+                );
+        }
+
+        private bool IsNumeric(int input)
+        {
+            return (input > 0);
+        }
+
+        private bool IsValid(string input)
+        {
+            return !string.IsNullOrWhiteSpace(input);
         }
     }
 }

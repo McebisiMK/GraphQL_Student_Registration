@@ -6,6 +6,7 @@ namespace Registration.Service.Contracts
 {
     public interface IAddressService
     {
+        Task<Address> Add(Address address);
         Task<IEnumerable<Address>> GetAll();
         Task<Address> GetById(int id);
         Task<IEnumerable<Address>> GetByStreet(string name);

@@ -2,6 +2,7 @@
 using Registration.Repository.Contracts;
 using Registration.Service.Contracts;
 using Registration.Utilities.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,6 +17,16 @@ namespace Registration.Service.Services
             _semesterRepository = semesterRepository;
         }
 
+        public async Task<Semester> Add(Semester semester)
+        {
+            if (!Valid(semester))
+                throw new InvalidUserObject("Semester");
+
+            var lastInsertedID = await _semesterRepository.Add(semester);
+
+            return await _semesterRepository.GetById(lastInsertedID);
+        }
+
         public async Task<IEnumerable<Semester>> GetAll()
         {
             return await _semesterRepository.GetAll();
@@ -27,6 +38,16 @@ namespace Registration.Service.Services
                 throw new InvalidUserInputException(id.ToString());
 
             return await _semesterRepository.GetById(id);
+        }
+
+        private bool Valid(Semester semester)
+        {
+            return (IsValid(semester.Description));
+        }
+
+        private bool IsValid(string input)
+        {
+            return !string.IsNullOrWhiteSpace(input);
         }
     }
 }
