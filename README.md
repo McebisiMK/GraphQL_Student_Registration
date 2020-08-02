@@ -53,3 +53,39 @@
                 surname
             }
         }
+
+**Mutations:**
+- Check: Registration.API\GraphQL\Mutations\RegistrationMutation.cs         
+    - **Examples:**
+    ```
+        mutation ($address: AddressInputType!, $course: CourseInputType!, $semester: SemesterInputType!, $student: StudentInputType!, $subject: SubjectInputType!) {
+            addAddress(address: $address) {
+                id
+                unit
+                town
+                province
+            }
+            addCourse(course: $course) {
+                id
+                name
+            }
+            addSemester(semester: $semester) {
+                id
+                description
+            }
+            addStudent(student: $student) {
+                id
+                name
+                surname
+                addressId
+                cellphone
+                idNumber
+                courseId
+            }
+            addSubject(subject: $subject) {
+                id
+                name
+                courseId
+                semesterId
+            }
+        }
