@@ -4,6 +4,7 @@ using Registration.Repository.Contracts;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Registration.Repository.Repositories
 {
@@ -18,6 +19,16 @@ namespace Registration.Repository.Repositories
             _dbSet = _registrationsDBContext.Set<TEntity>();
         }
 
+        public async Task Add(TEntity entity)
+        {
+            await _dbSet.AddAsync(entity);
+        }
+
+        public bool Exists(Expression<Func<TEntity, bool>> expression)
+        {
+            return _dbSet.Any(expression);
+        }
+
         public IQueryable<TEntity> GetAll()
         {
             return _dbSet;
@@ -26,6 +37,11 @@ namespace Registration.Repository.Repositories
         public IQueryable<TEntity> GetBy(Expression<Func<TEntity, bool>> expression)
         {
             return _dbSet.Where(expression);
+        }
+
+        public async Task SaveAsync()
+        {
+           await _registrationsDBContext.SaveChangesAsync();
         }
     }
 }

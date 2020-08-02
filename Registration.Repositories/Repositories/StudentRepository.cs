@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Registration.Entities.Models;
 using Registration.Repository.Contracts;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Registration.Repository.Repositories
@@ -13,6 +16,17 @@ namespace Registration.Repository.Repositories
         public StudentRepository(IGenericRepository<Student> genericRepository)
         {
             _genericRepository = genericRepository;
+        }
+
+        public async Task Add(Student student)
+        {
+            await _genericRepository.Add(student);
+            await _genericRepository.SaveAsync();
+        }
+
+        public bool Exists(Expression<Func<Student, bool>> expression)
+        {
+            return _genericRepository.Exists(expression);
         }
 
         public async Task<IEnumerable<Student>> GetAll()

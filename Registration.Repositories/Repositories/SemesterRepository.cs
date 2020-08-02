@@ -15,6 +15,14 @@ namespace Registration.Repository.Repositories
             _genericRepository = genericRepository;
         }
 
+        public async Task<int> Add(Semester semester)
+        {
+            await _genericRepository.Add(semester);
+            await _genericRepository.SaveAsync();
+
+            return semester.Id;
+        }
+
         public async Task<IEnumerable<Semester>> GetAll()
         {
             return await _genericRepository

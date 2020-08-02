@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Registration.Entities.Models;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Registration.Repository.Contracts
 {
@@ -8,5 +10,8 @@ namespace Registration.Repository.Contracts
     {
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> GetBy(Expression<Func<TEntity, bool>> expression);
+        Task Add(TEntity entity);
+        bool Exists(Expression<Func<TEntity, bool>> expression);
+        Task SaveAsync();
     }
 }

@@ -15,6 +15,14 @@ namespace Registration.Repository.Repositories
             _genericRepository = genericRepository;
         }
 
+        public async Task<int> Add(Address address)
+        {
+            await _genericRepository.Add(address);
+            await _genericRepository.SaveAsync();
+
+            return address.Id;
+        }
+
         public async Task<IEnumerable<Address>> GetAll()
         {
             return await _genericRepository
