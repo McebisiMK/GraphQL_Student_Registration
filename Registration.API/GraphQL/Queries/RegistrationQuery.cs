@@ -1,5 +1,5 @@
 ﻿using GraphQL.Types;
-using Registration.API.GraphQL.Types;
+using Registration.API.GraphQL_Types.QueryTypes;
 using Registration.Service.Contracts;
 
 namespace Registration.API.GraphQL_Queries
@@ -19,7 +19,7 @@ namespace Registration.API.GraphQL_Queries
                     "StudentByStudentNumber",
                     arguments: new QueryArguments
                         (
-                            new QueryArgument<StringGraphType> { Name = "studentNumber" }
+                            new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "studentNumber" }
                         ),
                     resolve: async ctx => 
                     {
@@ -34,8 +34,8 @@ namespace Registration.API.GraphQL_Queries
                     "StudentByFullName",
                     arguments: new QueryArguments
                         (
-                            new QueryArgument<StringGraphType> { Name = "name" },
-                            new QueryArgument<StringGraphType> { Name = "surname" }
+                            new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
+                            new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "surname" }
                         ),
                     resolve: async ctx =>
                     {
@@ -51,7 +51,7 @@ namespace Registration.API.GraphQL_Queries
                     "StudentByCourse",
                     arguments: new QueryArguments
                         (
-                            new QueryArgument<IntGraphType> { Name = "courseId" }
+                            new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "courseId" }
                         ),
                     resolve: async ctx =>
                     {
