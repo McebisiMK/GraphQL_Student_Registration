@@ -1,4 +1,6 @@
-﻿using GraphQL;
+﻿using GraphiQl;
+using GraphQL;
+using GraphQL.Conventions;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Registration.API.GraphQL_Mutations;
+using Registration.API.GraphQL_Queries;
 using Registration.API.GraphQL_Schema;
 using Registration.Entities.Models;
 using Registration.Entities.Seeding;
@@ -31,14 +35,17 @@ namespace Registration.API
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("RegistrationDatabase");
+
+            services.AddSingleton(provider => new GraphQLEngine()
+                .WithFieldResolutionStrategy(FieldResolutionStrategy.Normal)
+                .BuildSchema(typeof(SchemaDefinition<RegistrationQuery, RegistrationMutation>)));
             services.AddDbContext<RegistrationsDBContext>(builder => builder.UseSqlServer(connectionString));
             services.AddScoped<IDependencyResolver>(dependencyResolver => new FuncDependencyResolver(dependencyResolver.GetRequiredService));
             services.AddScoped<RegistrationSchema>();
 
             services.AddGraphQL(options => { options.ExposeExceptions = _hostingEnvironment.IsDevelopment(); })
                     .AddGraphTypes(ServiceLifetime.Scoped).AddUserContextBuilder(httpContext => httpContext.User)
-                    .AddDataLoader()
-                    .AddWebSockets();
+                    .AddDataLoader();
 
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IAddressService, AddressService>();
@@ -65,9 +72,9 @@ namespace Registration.API
             app.UseCors(builder =>
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseWebSockets();
-            //app.UseGraphQLWebSockets<RegistrationSchema>("/graphql");
-            app.UseGraphQL<RegistrationSchema>();
-            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+            app.UseGraphiQl("/graphiql");
+            app.UseGraphQL<RegistrationSchema>("/graphql");
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions { Path = "/ui/playground" });
             app.UseHttpsRedirection();
             registrationsDBContext.Seed();
             app.UseMvc();
