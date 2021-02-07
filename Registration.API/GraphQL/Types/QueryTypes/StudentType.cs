@@ -10,7 +10,7 @@ namespace Registration.API.GraphQL_Types.QueryTypes
 {
     public class StudentType : ObjectGraphType<Student>
     {
-        public StudentType(IAddressService addressService, ISubjectService subjectService)
+        public StudentType(IAddressService addressService, ISubjectService subjectService, ICourseService courseService)
         {
             Field(s => s.StudentNumber);
             Field(s => s.Name);
@@ -37,6 +37,16 @@ namespace Registration.API.GraphQL_Types.QueryTypes
                         var courseId = ctx.Source.CourseId;
 
                         return await subjectService.GetByCourse(courseId);
+                    }
+                );
+            FieldAsync<CourseType>
+                (
+                    "Course",
+                    resolve: async ctx =>
+                    {
+                        var courseId = ctx.Source.CourseId;
+
+                        return await courseService.GetById(courseId);
                     }
                 );
         }
