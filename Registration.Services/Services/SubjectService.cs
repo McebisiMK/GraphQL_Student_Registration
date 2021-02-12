@@ -54,9 +54,8 @@ namespace Registration.Service.Services
         private bool ContainsFeignKeys(Subject subject)
         {
             var hasCourse = _subjectRepository.Exists(sub => sub.CourseId.Equals(subject.CourseId));
-            var hasSemester = _subjectRepository.Exists(sub => sub.SemesterId.Equals(subject.SemesterId));
 
-            return (hasCourse && hasSemester);
+            return hasCourse;
         }
 
         private bool Valid(Subject subject)
@@ -64,8 +63,8 @@ namespace Registration.Service.Services
             return
                 (
                     IsValid(subject.Name) &&
-                    IsNumeric(subject.CourseId) &&
-                    IsNumeric(subject.SemesterId)
+                    IsValid(subject.Semester.ToString()) &&
+                    IsNumeric(subject.CourseId)
                 );
         }
 

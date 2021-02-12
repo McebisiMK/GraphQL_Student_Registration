@@ -7,8 +7,8 @@ namespace Registration.API.GraphQL.Types.MutationTypes
         public SubjectInputType()
         {
             Field<NonNullGraphType<StringGraphType>>("name");
+            Field<NonNullGraphType<StringGraphType>>("semester");
             Field<NonNullGraphType<IntGraphType>>("courseId");
-            Field<NonNullGraphType<IntGraphType>>("semesterId");
         }
     }
 }

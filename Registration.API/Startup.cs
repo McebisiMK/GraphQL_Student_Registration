@@ -35,11 +35,11 @@ namespace Registration.API
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("RegistrationDatabase");
+            services.AddDbContext<RegistrationsDBContext>(builder => builder.UseSqlServer(connectionString));
 
             services.AddSingleton(provider => new GraphQLEngine()
                 .WithFieldResolutionStrategy(FieldResolutionStrategy.Normal)
                 .BuildSchema(typeof(SchemaDefinition<RegistrationQuery, RegistrationMutation>)));
-            services.AddDbContext<RegistrationsDBContext>(builder => builder.UseSqlServer(connectionString));
             services.AddScoped<IDependencyResolver>(dependencyResolver => new FuncDependencyResolver(dependencyResolver.GetRequiredService));
             services.AddScoped<RegistrationSchema>();
 
@@ -51,17 +51,14 @@ namespace Registration.API
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<ISubjectService, SubjectService>();
             services.AddScoped<ICourseService, CourseService>();
-            services.AddScoped<ISemesterService, SemesterService>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
-            services.AddScoped<ISemesterRepository, SemesterRepository>();
             services.AddScoped<IGenericRepository<Student>, GenericRepository<Student>>();
             services.AddScoped<IGenericRepository<Address>, GenericRepository<Address>>();
             services.AddScoped<IGenericRepository<Subject>, GenericRepository<Subject>>();
             services.AddScoped<IGenericRepository<Course>, GenericRepository<Course>>();
-            services.AddScoped<IGenericRepository<Semester>, GenericRepository<Semester>>();
 
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

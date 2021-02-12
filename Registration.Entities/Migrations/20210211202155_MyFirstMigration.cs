@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Registration.Entities.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class MyFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,19 +34,6 @@ namespace Registration.Entities.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Course", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Semester",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Semester", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,8 +72,8 @@ namespace Registration.Entities.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    CourseId = table.Column<int>(nullable: false),
-                    SemesterId = table.Column<int>(nullable: false)
+                    Semster = table.Column<string>(type: "nvarchar(6)", unicode: false, maxLength: 50, nullable: false),
+                    CourseId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,12 +82,6 @@ namespace Registration.Entities.Migrations
                         name: "FK_Subject_Course",
                         column: x => x.CourseId,
                         principalTable: "Course",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Subject_Semester",
-                        column: x => x.SemesterId,
-                        principalTable: "Semester",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -119,11 +100,6 @@ namespace Registration.Entities.Migrations
                 name: "IX_Subject_CourseId",
                 table: "Subject",
                 column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Subject_SemesterId",
-                table: "Subject",
-                column: "SemesterId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -139,9 +115,6 @@ namespace Registration.Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "Course");
-
-            migrationBuilder.DropTable(
-                name: "Semester");
         }
     }
 }

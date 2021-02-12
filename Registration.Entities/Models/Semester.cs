@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Registration.Entities.Models
 {
-    public partial class Semester
+    public enum Semester
     {
-        public Semester()
-        {
-            Subject = new HashSet<Subject>();
-        }
-
-        public int Id { get; set; }
-        public string Description { get; set; }
-
-        public ICollection<Subject> Subject { get; set; }
+        First,
+        Second
     }
 }

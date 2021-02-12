@@ -23,12 +23,9 @@ namespace Registration.Entities.Seeding
                 var courseId = registrationsDBContext.Course.FirstOrDefault(x => x.Name.Equals("Course Name")).Id;
 
                 registrationsDBContext.Student.AddRange(GetStudentInitialData(addressId, courseId));
-                registrationsDBContext.Semester.Add(GetSemesterInitialData());
                 registrationsDBContext.SaveChanges();
 
-                var semesterId = registrationsDBContext.Semester.FirstOrDefault(x => x.Description.Equals("Semester Name")).Id;
-
-                registrationsDBContext.Subject.AddRange(GetSubjectInitialData(semesterId, courseId));
+                registrationsDBContext.Subject.AddRange(GetSubjectInitialData(courseId));
                 registrationsDBContext.SaveChanges();
             }
         }
@@ -79,15 +76,7 @@ namespace Registration.Entities.Seeding
             };
         }
 
-        private static Semester GetSemesterInitialData()
-        {
-            return new Semester
-            {
-                Description = "Semester Name"
-            };
-        }
-
-        private static List<Subject> GetSubjectInitialData(int semesterId, int courseId)
+        private static List<Subject> GetSubjectInitialData(int courseId)
         {
             return new List<Subject>
             {
@@ -95,19 +84,19 @@ namespace Registration.Entities.Seeding
                 {
                     Name = "Subject Name",
                     CourseId = courseId,
-                    SemesterId = semesterId
+                    Semester = Semester.First
                 },
                 new Subject
                 {
                     Name = "Subject Name 2",
                     CourseId = courseId,
-                    SemesterId = semesterId
+                    Semester = Semester.Second
                 },
                 new Subject
                 {
                     Name = "Subject Name 3",
                     CourseId = courseId,
-                    SemesterId = semesterId
+                    Semester = Semester.Second
                 }
             };
         }

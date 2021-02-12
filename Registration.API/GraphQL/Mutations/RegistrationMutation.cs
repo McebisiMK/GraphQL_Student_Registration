@@ -10,7 +10,7 @@ namespace Registration.API.GraphQL_Mutations
 {
     public class RegistrationMutation : ObjectGraphType
     {
-        public RegistrationMutation(IAddressService addressService, ICourseService courseService, ISemesterService semesterService, IStudentService studentService, ISubjectService subjectService)
+        public RegistrationMutation(IAddressService addressService, ICourseService courseService, IStudentService studentService, ISubjectService subjectService)
         {
             FieldAsync<AddressType>
                 (
@@ -39,21 +39,6 @@ namespace Registration.API.GraphQL_Mutations
                         var course = ctx.GetArgument<Course>("course");
 
                         return await courseService.Add(course);
-                    }
-                );
-
-            FieldAsync<SemesterType>
-                (
-                    "AddSemester",
-                    arguments: new QueryArguments
-                    {
-                        new QueryArgument<NonNullGraphType<SemesterInputType>> { Name = "semester"}
-                    },
-                    resolve: async ctx =>
-                    {
-                        var semester = ctx.GetArgument<Semester>("semester");
-
-                        return await semesterService.Add(semester);
                     }
                 );
 

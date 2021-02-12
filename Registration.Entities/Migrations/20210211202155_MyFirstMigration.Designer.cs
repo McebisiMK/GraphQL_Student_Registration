@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Registration.Entities.Models;
 
 namespace Registration.Entities.Migrations
 {
     [DbContext(typeof(RegistrationsDBContext))]
-    partial class RegistrationsDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210211202155_MyFirstMigration")]
+    partial class MyFirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +119,7 @@ namespace Registration.Entities.Migrations
                     b.Property<string>("Semester")
                         .IsRequired()
                         .HasColumnName("Semster")
-                        .HasColumnType("varchar(6)")
+                        .HasColumnType("nvarchar(6)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 

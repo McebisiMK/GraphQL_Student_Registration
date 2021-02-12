@@ -107,8 +107,8 @@ namespace Registration.Tests.Queries
                         Id = 1,
                         Name = "Subject Name",
                         CourseId = 1,
-                        SemesterId = 1
-                    };
+                        Semester = Semester.First
+            };
         }
 
         private List<Subject> GetSubjects()
@@ -120,21 +120,21 @@ namespace Registration.Tests.Queries
                                     Id = 1,
                                     Name = "Subject Name",
                                     CourseId = 1,
-                                    SemesterId = 1
+                                    Semester = Semester.First
                                 },
                                 new Subject
                                 {
                                     Id = 2,
                                     Name = "Subject Name 2",
                                     CourseId = 1,
-                                    SemesterId = 1
+                                    Semester = Semester.First
                                 },
                                 new Subject
                                 {
                                     Id = 3,
                                     Name = "Subject Name 3",
                                     CourseId = 1,
-                                    SemesterId = 1
+                                    Semester = Semester.Second
                                 }
                             };
 

@@ -44,7 +44,6 @@ namespace Registration.Tests.Mutations
             //-----------------------Arrange----------------------------------
             var subject = GetSubject();
             subject.CourseId = courseId;
-            subject.SemesterId = semesterId;
             var subjectRepository = Substitute.For<ISubjectRepository>();
             var subjectService = CreateSubjectService(subjectRepository);
 
@@ -83,7 +82,6 @@ namespace Registration.Tests.Mutations
             //-----------------------Arrange----------------------------------
             var semesterId = 7;
             var subject = GetSubject();
-            subject.SemesterId = semesterId;
             var subjectRepository = Substitute.For<ISubjectRepository>();
             var subjectService = CreateSubjectService(subjectRepository);
 
@@ -123,39 +121,8 @@ namespace Registration.Tests.Mutations
             {
                 Name = "Subject Name",
                 CourseId = 1,
-                SemesterId = 1
+                Semester = Semester.First
             };
-        }
-
-        private List<Subject> GetSubjects()
-        {
-            var subjects = new List<Subject>
-                            {
-                                new Subject
-                                {
-                                    Id = 1,
-                                    Name = "Subject Name",
-                                    CourseId = 1,
-                                    SemesterId = 1
-                                },
-                                new Subject
-                                {
-                                    Id = 2,
-                                    Name = "Subject Name 2",
-                                    CourseId = 1,
-                                    SemesterId = 1
-                                },
-                                new Subject
-                                {
-
-                                    Id = 3,
-                                    Name = "Subject Name 3",
-                                    CourseId = 1,
-                                    SemesterId = 1
-                                }
-                            };
-
-            return subjects;
         }
 
         private SubjectService CreateSubjectService(ISubjectRepository subjectRepository)

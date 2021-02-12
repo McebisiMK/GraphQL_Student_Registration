@@ -17,7 +17,6 @@ namespace Registration.Entities.Models
 
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<Course> Course { get; set; }
-        public virtual DbSet<Semester> Semester { get; set; }
         public virtual DbSet<Student> Student { get; set; }
         public virtual DbSet<Subject> Subject { get; set; }
 
@@ -47,14 +46,6 @@ namespace Registration.Entities.Models
             modelBuilder.Entity<Course>(entity =>
             {
                 entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Semester>(entity =>
-            {
-                entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -108,17 +99,16 @@ namespace Registration.Entities.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Semester)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Subject)
                     .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Subject_Course");
-
-                entity.HasOne(d => d.Semester)
-                    .WithMany(p => p.Subject)
-                    .HasForeignKey(d => d.SemesterId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Subject_Semester");
             });
         }
     }

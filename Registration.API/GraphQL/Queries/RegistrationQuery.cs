@@ -6,7 +6,7 @@ namespace Registration.API.GraphQL_Queries
 {
     public class RegistrationQuery : ObjectGraphType
     {
-        public RegistrationQuery(IStudentService studentService, ISubjectService subjectService, ISemesterService semesterService, ICourseService courseService, IAddressService addressService)
+        public RegistrationQuery(IStudentService studentService, ISubjectService subjectService, ICourseService courseService, IAddressService addressService)
         {
             FieldAsync<ListGraphType<StudentType>>
                 (
@@ -94,27 +94,6 @@ namespace Registration.API.GraphQL_Queries
                         var courseId = ctx.GetArgument<int>("courseId");
 
                         return await subjectService.GetByCourse(courseId);
-                    }
-                );
-
-            FieldAsync<ListGraphType<SemesterType>>
-                (
-                    "allSemester",
-                    resolve: async ctx => await semesterService.GetAll()
-                );
-
-            FieldAsync<SemesterType>
-                (
-                    "semesterById",
-                    arguments: new QueryArguments
-                        (
-                            new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "semesterId" }
-                        ),
-                    resolve: async ctx =>
-                    {
-                        var semesterId = ctx.GetArgument<int>("semesterId");
-
-                        return await semesterService.GetById(semesterId);
                     }
                 );
 

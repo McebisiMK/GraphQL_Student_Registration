@@ -6,12 +6,12 @@ namespace Registration.API.GraphQL_Types.QueryTypes
 {
     public class SubjectType : ObjectGraphType<Subject>
     {
-        public SubjectType(ICourseService courseService, ISemesterService semesterService)
+        public SubjectType(ICourseService courseService)
         {
             Field(s => s.Id);
             Field(s => s.Name);
             Field(s => s.CourseId);
-            Field(s => s.SemesterId);
+            Field<SemesterEnumType>("Semester", "Enumeration for semester object");
             FieldAsync<CourseType>
                 (
                     "Course",
@@ -20,16 +20,6 @@ namespace Registration.API.GraphQL_Types.QueryTypes
                         var courseId = ctx.Source.CourseId;
 
                         return await courseService.GetById(courseId);
-                    }
-                );
-            FieldAsync<SemesterType>
-                (
-                    "Semester",
-                    resolve: async ctx =>
-                    {
-                        var semesterId = ctx.Source.SemesterId;
-
-                        return await semesterService.GetById(semesterId);
                     }
                 );
         }

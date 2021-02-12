@@ -9,14 +9,14 @@ using Registration.Entities.Models;
 namespace Registration.Entities.Migrations
 {
     [DbContext(typeof(RegistrationsDBContext))]
-    [Migration("20200725154643_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20210211202630_ChangedSemesterType")]
+    partial class ChangedSemesterType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -63,22 +63,6 @@ namespace Registration.Entities.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Course");
-                });
-
-            modelBuilder.Entity("Registration.Entities.Models.Semester", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Semester");
                 });
 
             modelBuilder.Entity("Registration.Entities.Models.Student", b =>
@@ -132,13 +116,16 @@ namespace Registration.Entities.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<int>("SemesterId");
+                    b.Property<string>("Semester")
+                        .IsRequired()
+                        .HasColumnName("Semster")
+                        .HasColumnType("varchar(6)")
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("SemesterId");
 
                     b.ToTable("Subject");
                 });
@@ -162,11 +149,6 @@ namespace Registration.Entities.Migrations
                         .WithMany("Subject")
                         .HasForeignKey("CourseId")
                         .HasConstraintName("FK_Subject_Course");
-
-                    b.HasOne("Registration.Entities.Models.Semester", "Semester")
-                        .WithMany("Subject")
-                        .HasForeignKey("SemesterId")
-                        .HasConstraintName("FK_Subject_Semester");
                 });
 #pragma warning restore 612, 618
         }
