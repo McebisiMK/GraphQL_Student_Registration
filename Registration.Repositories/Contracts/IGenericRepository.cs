@@ -11,6 +11,7 @@ namespace Registration.Repository.Contracts
         IQueryable<TEntity> GetAll();
         IQueryable<TEntity> GetBy(Expression<Func<TEntity, bool>> expression);
         Task Add(TEntity entity);
+        void Update(TEntity oldEntity, TEntity newEntity);
         bool Exists(Expression<Func<TEntity, bool>> expression);
         Task SaveAsync();
     }

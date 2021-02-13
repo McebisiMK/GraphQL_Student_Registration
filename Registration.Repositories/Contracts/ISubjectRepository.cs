@@ -8,7 +8,8 @@ namespace Registration.Repository.Contracts
 {
     public interface ISubjectRepository
     {
-        Task<int> Add(Subject subject);
+        Task<Subject> Add(Subject subject);
+        Task<Subject> Update(Subject oldSubject, Subject newSubject);
         bool Exists(Expression<Func<Subject, bool>> expression);
         Task<IEnumerable<Subject>> GetAll();
         Task<Subject> GetById(int id);

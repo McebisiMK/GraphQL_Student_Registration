@@ -8,7 +8,8 @@ namespace Registration.Repository.Contracts
 {
     public interface IStudentRepository
     {
-        Task Add(Student student);
+        Task<Student> Add(Student student);
+        Task<Student> Update(Student oldStudent, Student newStudent);
         bool Exists(Expression<Func<Student, bool>> expression);
         Task<IEnumerable<Student>> GetAll();
         Task<Student> GetByStudentNumber(string studentNumber);
