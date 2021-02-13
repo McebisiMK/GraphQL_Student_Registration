@@ -25,9 +25,19 @@ namespace Registration.Service.Services
             if (!ContainsFeignKeys(subject))
                 throw new InvalidForeignKeyException("Subject");
 
-            var lastInsertedID = await _subjectRepository.Add(subject);
+            return await _subjectRepository.Add(subject);
+        }
 
-            return await _subjectRepository.GetById(lastInsertedID);
+        public async Task<Subject> Update(int id, Subject newSubject)
+        {
+            var subjectExists = _subjectRepository.Exists(subject => subject.Id.Equals(id));
+
+            if (!Valid(newSubject) && !subjectExists)
+                throw new InvalidUserObject("Subject");
+
+            var existingSubject = await _subjectRepository.GetById(id);
+
+            return await _subjectRepository.Update(existingSubject, newSubject);
         }
 
         public async Task<IEnumerable<Subject>> GetAll()

@@ -17,12 +17,20 @@ namespace Registration.Repository.Repositories
             _genericRepository = genericRepository;
         }
 
-        public async Task<int> Add(Subject subject)
+        public async Task<Subject> Add(Subject subject)
         {
             await _genericRepository.Add(subject);
             await _genericRepository.SaveAsync();
 
-            return subject.Id;
+            return subject;
+        }
+
+        public async Task<Subject> Update(Subject oldSubject, Subject newSubject)
+        {
+            _genericRepository.Update(oldSubject, newSubject);
+            await _genericRepository.SaveAsync();
+
+            return newSubject;
         }
 
         public bool Exists(Expression<Func<Subject, bool>> expression)

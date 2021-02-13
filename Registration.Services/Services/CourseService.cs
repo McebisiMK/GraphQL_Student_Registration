@@ -22,9 +22,19 @@ namespace Registration.Service.Services
             if (!Valid(course))
                 throw new InvalidUserObject("Course");
 
-            var lastInsertedID = await _courseRepository.Add(course);
+            return await _courseRepository.Add(course); 
+        }
 
-            return await _courseRepository.GetById(lastInsertedID);
+        public async Task<Course> Update(int id, Course newCourse)
+        {
+            var courseExists = _courseRepository.Exists(course => course.Id.Equals(id));
+
+            if (!Valid(newCourse) && !courseExists)
+                throw new InvalidUserObject("Course");
+
+            var existingCourse = await _courseRepository.GetById(id);
+
+            return await _courseRepository.Update(existingCourse, newCourse);
         }
 
         public async Task<IEnumerable<Course>> GetAll()

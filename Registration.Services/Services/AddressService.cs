@@ -22,9 +22,19 @@ namespace Registration.Service.Services
             if (!Valid(address))
                 throw new InvalidUserObject("Address");
 
-            var lastInsertID = await _addressRepository.Add(address);
+            return await _addressRepository.Add(address);
+        }
 
-            return await _addressRepository.GetById(lastInsertID);
+        public async Task<Address> Update(int id, Address newAddress)
+        {
+            var addressExists = _addressRepository.Exists(address => address.Id.Equals(id));
+
+            if (!Valid(newAddress) && !addressExists)
+                throw new InvalidUserObject("Address");
+
+            var existingAddress = await _addressRepository.GetById(id);
+
+            return await _addressRepository.Update(existingAddress, newAddress);
         }
 
         public async Task<IEnumerable<Address>> GetAll()
@@ -50,7 +60,7 @@ namespace Registration.Service.Services
 
         private bool Valid(Address address)
         {
-            return 
+            return
                 (
                     IsValid(address.Unit) &&
                     IsValid(address.Street) &&

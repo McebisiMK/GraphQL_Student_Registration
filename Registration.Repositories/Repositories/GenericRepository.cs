@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Registration.Entities.Models;
-using Registration.Repository.Contracts;
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Registration.Entities.Models;
+using Registration.Repository.Contracts;
 
 namespace Registration.Repository.Repositories
 {
@@ -24,6 +24,11 @@ namespace Registration.Repository.Repositories
             await _dbSet.AddAsync(entity);
         }
 
+        public void Update(TEntity oldEntity, TEntity newEntity)
+        {
+            _registrationsDBContext.Entry(oldEntity).CurrentValues.SetValues(newEntity);
+        }
+
         public bool Exists(Expression<Func<TEntity, bool>> expression)
         {
             return _dbSet.Any(expression);
@@ -41,7 +46,7 @@ namespace Registration.Repository.Repositories
 
         public async Task SaveAsync()
         {
-           await _registrationsDBContext.SaveChangesAsync();
+            await _registrationsDBContext.SaveChangesAsync();
         }
     }
 }

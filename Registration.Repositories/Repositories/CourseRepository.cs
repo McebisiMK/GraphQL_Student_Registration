@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Registration.Entities.Models;
 using Registration.Repository.Contracts;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Registration.Repository.Repositories
@@ -15,12 +17,20 @@ namespace Registration.Repository.Repositories
             _genericRepository = genericRepository;
         }
 
-        public async Task<int> Add(Course course)
+        public async Task<Course> Add(Course course)
         {
             await _genericRepository.Add(course);
             await _genericRepository.SaveAsync();
 
-            return course.Id;
+            return course;
+        }
+
+        public async Task<Course> Update(Course oldCourse, Course newCourse)
+        {
+            _genericRepository.Update(oldCourse, newCourse);
+            await _genericRepository.SaveAsync();
+
+            return newCourse;
         }
 
         public async Task<IEnumerable<Course>> GetAll()
@@ -35,6 +45,11 @@ namespace Registration.Repository.Repositories
             return await _genericRepository
                             .GetBy(course => course.Id.Equals(id))
                             .FirstOrDefaultAsync();
+        }
+
+        public bool Exists(Expression<Func<Course, bool>> expression)
+        {
+            return _genericRepository.Exists(expression);
         }
     }
 }

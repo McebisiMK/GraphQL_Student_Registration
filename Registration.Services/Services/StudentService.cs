@@ -28,14 +28,20 @@ namespace Registration.Service.Services
 
             var studentNumber = await CreateNewStudentNumber();
             student.StudentNumber = studentNumber;
-            await _studentRepository.Add(student);
-            var students = await _studentRepository.GetAll();
-            var lastInsertedStudentNumber = students
-                                            .OrderByDescending(recods => recods.StudentNumber)
-                                            .FirstOrDefault()
-                                            .StudentNumber;
 
-            return await _studentRepository.GetByStudentNumber(lastInsertedStudentNumber);
+            return await _studentRepository.Add(student);
+        }
+
+        public async Task<Student> Update(string studentNumber, Student newStudent)
+        {
+            var studentExists = _studentRepository.Exists(student => student.StudentNumber.Equals(studentNumber));
+
+            if (!Valid(newStudent) && !studentExists)
+                throw new InvalidUserObject("Student");
+
+            var existingStudent = await _studentRepository.GetByStudentNumber(studentNumber);
+
+            return await _studentRepository.Update(existingStudent, newStudent);
         }
 
         public async Task<IEnumerable<Student>> GetAll()

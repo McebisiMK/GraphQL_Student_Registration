@@ -18,10 +18,20 @@ namespace Registration.Repository.Repositories
             _genericRepository = genericRepository;
         }
 
-        public async Task Add(Student student)
+        public async Task<Student> Add(Student student)
         {
             await _genericRepository.Add(student);
             await _genericRepository.SaveAsync();
+
+            return student;
+        }
+
+        public async Task<Student> Update(Student oldStudent, Student newStudent)
+        {
+            _genericRepository.Update(oldStudent, newStudent);
+            await _genericRepository.SaveAsync();
+
+            return newStudent;
         }
 
         public bool Exists(Expression<Func<Student, bool>> expression)
